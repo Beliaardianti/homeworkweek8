@@ -48,4 +48,30 @@ router.get('/films/category/:categoryId', (req, res) => {
   );
 });
 
+// Menampilkan data seluruh list actor
+router.get('/actor', (req, res) => {
+  pool.query('SELECT * FROM actor ORDER BY actor_id ASC', (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Terjadi kesalahan saat mengambil data aktor.' });
+    } else {
+      res.status(200).json(results.rows);
+    }
+  });
+});
+
+
+// Menampilkan data seluruh list actor berdasarkan id
+router.get('/actor/:id', (req, res) => {
+  const actorId = req.params.id; // Dapatkan actor_id dari parameter permintaan
+  pool.query('SELECT * FROM actor WHERE actor_id = $1', [actorId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Terjadi kesalahan saat mengambil data aktor.' });
+    } else {
+      res.status(200).json(results.rows);
+    }
+  });
+});
+
 module.exports = router;
